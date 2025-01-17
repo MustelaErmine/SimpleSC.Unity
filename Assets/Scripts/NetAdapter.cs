@@ -1,18 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SocketIO;
+using System.Net.WebSockets;
 
 public class NetAdapter : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] SocketIOComponent socketIO;
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        socketIO.On("abc", (SocketIOEvent ev) => { Debug.Log("abc"); });
+        socketIO.On("abc", (SocketIOEvent ev) => { Debug.Log("def"); });
     }
 }
