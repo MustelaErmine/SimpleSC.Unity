@@ -1,18 +1,35 @@
+using Newtonsoft.Json;
+using SimpleSC.Server.Actions;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class ActionHandler : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] SessionHandler sessionHandler;
+    [SerializeField] string code;
 
-    // Update is called once per frame
-    void Update()
+    [SerializeField] GameObject darkPanel;
+    [SerializeField] TextMeshProUGUI textMesh;
+    public void UpdateState()
     {
-        
+        UnitAction action = sessionHandler.CurrentState.actions.ToList()
+            .Find((UnitAction act) => act.code == code);
+        print($"set cooldown {action.currentCooldown} {code}");
+        if (action.currentCooldown <= 0)
+        {
+            darkPanel.SetActive(false);
+        } 
+        else
+        {
+            darkPanel.SetActive(true);
+            textMesh.text = action.currentCooldown.ToString();
+        }
+    }
+    public void SendAction()
+    {
+        sessionHandler.Emit("action", code);
     }
 }
